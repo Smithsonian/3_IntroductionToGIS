@@ -1,3 +1,9 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:8f5282f1ebd90f5260967d1877ca30e86903a7ea975255c0dd93ac6807806444
-size 159
+"0","# What is the extent of the image?
+ext(Image)
+"
+"1","SpatExtent :"
+"1"," "
+"1","713340, 818400, 9802230, 9891510"
+"1"," "
+"1","(xmin, xmax, ymin, ymax)
+"

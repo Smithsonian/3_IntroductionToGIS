@@ -1,3 +1,5 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:0c45011967ef94d86e18bf20087f1c281ba8ef9a0049803467c3e4afea6f2dab
-size 1005
+"0","# Read the image
+Image <- rast(""Data/Landsat8.tif"")
+"
+"2","Error: [rast] file does not exist: Data/Landsat8.tif
+"
