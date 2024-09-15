@@ -1,7 +1,3 @@
-## ----setup, include=FALSE---------------------------------------------------
-knitr::opts_chunk$set(echo = TRUE)
-
-
 ## ----warning=F, message=F---------------------------------------------------
 # Load libraries
 library(sf)
