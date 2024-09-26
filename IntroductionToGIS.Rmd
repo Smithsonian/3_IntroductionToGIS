@@ -381,7 +381,7 @@ Wed can also save rasters to your hard drive so that the file can be read into o
 
 1. Write the ndvi file we created above to your 'Output' directory as a .tif.  Call this file 'NDVI.tif'.
 
-```{r, warning=F,message=F,echo=F,eval=F}
+```{r, warning=F,message=F, echo=F, eval=F}
 writeRaster(ndvi, "Output/NDVI.tif", overwrite=TRUE)
 ```
 
@@ -635,7 +635,7 @@ wb.lines <- wb.pts.utm %>%
 
 ## `Tmap`
 
-The basic building block in `tmap` is `tm_shape()`, which creates a tmap-element that defines input data as vector or raster objects. We then add one or more layer elements, such as `tm_fill()`, `tm_borders()`, `tm_dots()`, `tm_raster()`, depending on the data type.  `Tmap` syntax involves separating between the input data and the aesthetics for data visualization. Each input dataset can be displayed in many different ways, largely dependent on whether the data object is a raster, point, line, or polygon layer.
+The basic building block in `tmap` is `tm_shape()`, which creates a tmap-element that defines input data as vector or raster objects. We then add one or more layer elements, such as `tm_fill()`, `tm_borders()`, `tm_dots()`, `tm_raster()`, depending on the data type.  `Tmap` syntax involves separating between the input data and the aesthetics for data visualization. Each input dataset can be displayed in many different ways, largely dependent on whether the data object is a raster, point, line, or polygon layer.  We can link different commands in `tmap` by adding them (`+`) together.
 
 <div style="float:right">
 <img width="150" height="150" src="tmap.jpg">
@@ -644,6 +644,55 @@ The basic building block in `tmap` is `tm_shape()`, which creates a tmap-element
 You can change the aesthetics of the objects in the map using either variable fields (data in your shapefile) or constant values. The most commonly used aesthetics for fill and border layers include color, transparency, line width and line type, which are set with `col`, `alpha`, `lwd`, and `lty` arguments, respectively.  Most importantly, you can freely and easily access available basemaps to place as a background on the data you add to the map.  This is done using the function `tm_basemap()`.
 
 In addition to the instructions described here, `tmap` also has a number of helpful vignettes to get products up and running.  The vignettes can be found [here]( https://cran.r-project.org/web/packages/tmap/vignettes/tmap-getstarted.html).
+
+```{r, warning=F, message=F}
+# Create a simple map
+
+# tmap has two options, 'plot' and 'view'
+# Here, we'll start with the basic plot
+tmap_mode('plot')
+
+# Add the conservancy boundaries - Polygon
+Mara_basic <- tm_shape(Mara_Cons) + 
+  tm_fill(col = "green",
+          alpha = 0.2) +
+  tm_borders(col = 'green') + # Color of the borders
+  # Add to legend
+  tm_add_legend("fill", 
+                col = 'green',
+                alpha = 0.2,
+                border.col = 'green',
+                title = "Conservancies") +
+  
+  # Add the Main Roads - MultiLines
+  tm_shape(Roads) +
+    tm_lines(col = "black") +
+  # Add to legend
+  tm_add_legend("line", 
+                col = 'black', 
+                title = "Roads") +
+  
+  # Load the Towns - change the size of the symbol
+  tm_shape(Towns) +
+    tm_dots(col = 'red',
+            size = 0.2) + 
+  # Add to legend
+  tm_add_legend("symbol", 
+                shape = 16, 
+                size=0.4 , 
+                col = 'red', 
+                title = "Major towns") +
+  
+  # Add a legend, scale bar and North symbol
+  tm_compass(position = c("right", "top")) +
+  tm_scale_bar(position = c("right", "bottom")) +
+  tm_layout(legend.outside = T)
+
+# Send the plot to the window  
+Mara_basic
+```
+
+Now let's get a bit more complicated and make the plot dynamic using the `view` option, adding a basemap, and including the wildebeest points/lines.
 
 ```{r, warning=F, message=F}
 # Create a tmap
@@ -716,7 +765,7 @@ tmap_save(Mara_proj, filename = "Output/MaraMap.html")
 1. Save the wildebeest point file (`wb.pts.wb`) as a shapefile in your OUtput directory.  Name the file `wb_points.shp`.
 2. Save the wildebeest line file (`wb.lines`) as a shapefile in your Output directory.  Name the file `wb_lines.shp`.
 
-```{r, warning=F,message=F,echo=F,eval=F}
+```{r, warning=F,message=F, echo=F, eval=F}
 # Write wildebeest points to shapefile
 st_write(wb.pts.utm, "Output/wb_points.shp", append = FALSE)
 

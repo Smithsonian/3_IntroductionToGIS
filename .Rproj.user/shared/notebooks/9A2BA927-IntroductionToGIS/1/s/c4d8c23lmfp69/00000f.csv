@@ -1,5 +1,0 @@
-"0","# Read the image
-Image <- rast(""Data/Landsat8.tif"")
-"
-"2","Error: [rast] file does not exist: Data/Landsat8.tif
-"
