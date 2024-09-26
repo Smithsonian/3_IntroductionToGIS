@@ -1,8 +1,8 @@
-## ----setup, include=FALSE---------------------------------------------------------
+## ----setup, include=FALSE---------------------------------------------------------------------
 knitr::opts_chunk$set(echo = TRUE)
 
 
-## ----warning=F, message=F---------------------------------------------------------
+## ----warning=F, message=F---------------------------------------------------------------------
 # Load libraries
 library(sf)
 library(terra)
@@ -13,21 +13,21 @@ library(gt)
 library(tmap)
 
 
-## ---------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------
 plot(st_point(c(0,0)))
 plot(st_point(c(0.5,0.5)), add = T)
 
 
-## ---------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------
 # Generate a random linestring...6 numbers across 2 columns
 plot(st_linestring(matrix(runif(6), ncol=2)) )
 
 
-## ---------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------
 plot(st_polygon(list(rbind(c(0,0), c(1,0), c(1,1), c(0,1), c(0,0)))))
 
 
-## ---------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------
 # Import Kenya Major Towns CSV File.  Just a flat dataframe (non-spatial)
 my_df <- read.csv("Data/ke_major-towns.csv", header = TRUE)
 head(my_df)
@@ -38,17 +38,17 @@ print(points_sf)
 #plot(points_sf, pch = 18, cex=1)
 
 
-## ----warning=F, message=F---------------------------------------------------------
+## ----warning=F, message=F---------------------------------------------------------------------
 points_sf_UTM <- st_transform(points_sf, crs="+proj=utm +zone=37 +north +ellps=WGS84 +datum=WGS84 +units=m")
 points_sf_UTM
 
 
-## ----warning=F, message=F---------------------------------------------------------
+## ----warning=F, message=F---------------------------------------------------------------------
 ke_mammals <- st_read("Data/ke_mammals_WGS84.shp")
 ke_mammals
 
 
-## ----warning=F, message=F---------------------------------------------------------
+## ----warning=F, message=F---------------------------------------------------------------------
 # Look at the data
 plot(ke_mammals)
 
@@ -62,7 +62,7 @@ mammals_60 <- ke_mammals %>%
 mammals_60
 
 
-## ----warning=F, message=F, echo=F, eval=F-----------------------------------------
+## ----warning=F, message=F, echo=F, eval=F-----------------------------------------------------
 ## # Look at the head and structure
 ## head(mammals_60)
 ## str(mammals_60)
@@ -71,13 +71,13 @@ mammals_60
 ## plot(mammals_60)
 
 
-## ----warning=F, message=F---------------------------------------------------------
+## ----warning=F, message=F---------------------------------------------------------------------
 # Read the image
 Image <- rast("Data/Landsat8.tif")
 Image
 
 
-## ----warning=F, message=F---------------------------------------------------------
+## ----warning=F, message=F---------------------------------------------------------------------
 # Summarize the object
 print(Image)
 
@@ -94,7 +94,7 @@ summary(Image)
 ext(Image)
 
 
-## ----message=F, warning=F---------------------------------------------------------
+## ----message=F, warning=F---------------------------------------------------------------------
 # Obtain the Coordinate Reference System of the image
 crs(Image, proj=T)
 
@@ -106,7 +106,7 @@ crs(Image, proj=T)
 # crs(Imagelatlong, proj = T)
 
 
-## ---------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------
 # Plot an image.  Here, I am only plotting band 4.
 plot(Image, 4)
 
@@ -114,12 +114,12 @@ plot(Image, 4)
 plotRGB(Image, r=4, g=3, b=2, stretch="lin", axes=T, xlab="Easting", ylab="Northing", main="Landsdat 8, Bands 4,3,2 (RGB) - True Color Composite")
 
 
-## ----warning=F, message=F, echo=F, eval=F-----------------------------------------
+## ----warning=F, message=F, echo=F, eval=F-----------------------------------------------------
 ## # Plot a 3-band RGB image in false color composite
 ## plotRGB(Image, r=5, g=4, b=3, stretch = "lin", axes=TRUE, xlab="Easting", ylab="Northing", main="Landsat 8, Bands 5,4,3 (RGB) - False Color Composite")
 
 
-## ----warning=F, message=F---------------------------------------------------------
+## ----warning=F, message=F---------------------------------------------------------------------
 # Using standard math operators, rename the red band (band 3) and the near-infrared band (band 4) in the image.
 redBand <- Image$B4
 nirBand <- Image$B5
@@ -137,7 +137,7 @@ plot(ndvi)
 hist(ndvi)
 
 
-## ----warning=F, message=F---------------------------------------------------------
+## ----warning=F, message=F---------------------------------------------------------------------
 # Create random samples (pixels) from a raster
 ranSamps <- st_sample(st_as_sfc(st_bbox(ndvi)), size = 10, type = "random") # This step is skipped if you have a file that overlaps with your raster
 # Convert to a simple feature
@@ -154,11 +154,11 @@ ndvi.vals <- terra::extract(ndvi, ranSamps)  # We need to be explicit that extra
 ndvi.vals
 
 
-## ----warning=F,message=F,echo=F,eval=F--------------------------------------------
+## ----warning=F,message=F, echo=F, eval=F------------------------------------------------------
 ## writeRaster(ndvi, "Output/NDVI.tif", overwrite=TRUE)
 
 
-## ----warning=F, message=F---------------------------------------------------------
+## ----warning=F, message=F---------------------------------------------------------------------
 # Load Fence data layer - Data layer is Geographic 
 Fences <- st_read("Data/Fences_LandDx.shp") %>%
   select(type, active) %>% # Select the type of fence and whether it is active
@@ -187,7 +187,7 @@ MMNR <- st_read("Data/MMNR.shp") %>%
     select(NAME)
 
 
-## ----warning=F, message=F---------------------------------------------------------
+## ----warning=F, message=F---------------------------------------------------------------------
 # Create a quick plot of some of the data layers loaded.
 # Do they overlap?
 par(mfrow = c(1,2))
@@ -202,7 +202,7 @@ plot(st_geometry(Roads), col = 'black', add=TRUE)
 par(mfrow = c(1,1))
 
 
-## ----message=F,warning=F----------------------------------------------------------
+## ----message=F,warning=F----------------------------------------------------------------------
 # Complete a simple filter
 Nab_Cons <- Mara_Cons %>% 
   filter(short_name == "Naboisho Conservancy")
@@ -225,7 +225,7 @@ unique(Big_Cons$short_name)
 # plot(st_geometry(Big_Cons), col = 'green', add=T)
 
 
-## ----warning=F,message=F----------------------------------------------------------
+## ----warning=F,message=F----------------------------------------------------------------------
 # Create a blank raster.  Set the conservancy boundary as the extent.
 canvas <- rast(ext(Mara_Cons), crs=crs(Roads), resolution=50)
 
@@ -251,7 +251,7 @@ hist(dist.extract$layer)
 #Bomas.dist <- cbind(Bomas, dist.extract)
 
 
-## ----warning=F,message=F----------------------------------------------------------
+## ----warning=F,message=F----------------------------------------------------------------------
 # Read in the dataset
 WB <- read.csv(file = "Data/wild_mara.csv", header = TRUE)
 
@@ -293,7 +293,7 @@ WB <- WB %>%
 head(WB)
 
 
-## ----warning=F, message=F---------------------------------------------------------
+## ----warning=F, message=F---------------------------------------------------------------------
 # Summarize results to a table
 wb.Summary <- WB %>% 
 
@@ -344,7 +344,7 @@ gt_wb
 gtsave(gt_wb, filename = "Output/Summary_wildebeest.html")
 
 
-## ----warning=F, message=F---------------------------------------------------------
+## ----warning=F, message=F---------------------------------------------------------------------
 # Convert to a sf object
 wb.pts <- st_as_sf(WB, coords = c("longitude", "latitude"), crs = 4326) # Geographic
 wb.pts.utm <- st_transform(wb.pts, crs = 32736) # UTM 36S WGS84
@@ -356,7 +356,54 @@ wb.lines <- wb.pts.utm %>%
   st_cast("LINESTRING")
 
 
-## ----warning=F, message=F---------------------------------------------------------
+## ----warning=F, message=F---------------------------------------------------------------------
+# Create a simple map
+
+# tmap has two options, 'plot' and 'view'
+# Here, we'll start with the basic plot
+tmap_mode('plot')
+
+# Add the conservancy boundaries - Polygon
+Mara_basic <- tm_shape(Mara_Cons) + 
+  tm_fill(col = "green",
+          alpha = 0.2) +
+  tm_borders(col = 'green') + # Color of the borders
+  # Add to legend
+  tm_add_legend("fill", 
+                col = 'green',
+                alpha = 0.2,
+                border.col = 'green',
+                title = "Conservancies") +
+  
+  # Add the Main Roads - MultiLines
+  tm_shape(Roads) +
+    tm_lines(col = "black") +
+  # Add to legend
+  tm_add_legend("line", 
+                col = 'black', 
+                title = "Roads") +
+  
+  # Load the Towns - change the size of the symbol
+  tm_shape(Towns) +
+    tm_dots(col = 'red',
+            size = 0.2) + 
+  # Add to legend
+  tm_add_legend("symbol", 
+                shape = 16, 
+                size=0.4 , 
+                col = 'red', 
+                title = "Major towns") +
+  
+  # Add a legend, scale bar and North symbol
+  tm_compass(position = c("right", "top")) +
+  tm_scale_bar(position = c("right", "bottom")) +
+  tm_layout(legend.outside = T)
+
+# Send the plot to the window  
+Mara_basic
+
+
+## ----warning=F, message=F---------------------------------------------------------------------
 # Create a tmap
 tmap_mode('view') 
 
@@ -422,7 +469,7 @@ Mara_proj
 tmap_save(Mara_proj, filename = "Output/MaraMap.html")
 
 
-## ----warning=F,message=F,echo=F,eval=F--------------------------------------------
+## ----warning=F,message=F, echo=F, eval=F------------------------------------------------------
 ## # Write wildebeest points to shapefile
 ## st_write(wb.pts.utm, "Output/wb_points.shp", append = FALSE)
 ## 
